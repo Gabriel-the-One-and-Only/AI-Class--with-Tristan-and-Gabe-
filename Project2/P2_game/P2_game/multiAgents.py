@@ -13,7 +13,6 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
-from typing_extensions import Self
 from util import manhattanDistance
 from game import Directions
 import random, util
@@ -56,15 +55,12 @@ class ReflexAgent(Agent):
     def evaluationFunction(self, currentGameState, action):
         """
         Design a better evaluation function here.
-
         The evaluation function takes in the current and proposed successor
         GameStates (pacman.py) and returns a number, where higher numbers are better.
-
         The code below extracts some useful information from the state, like the
         remaining food (newFood) and Pacman position after moving (newPos).
         newScaredTimes holds the number of moves that each ghost will remain
         scared because of Pacman having eaten a power pellet.
-
         Print out these variables to see what you're getting, then combine them
         to create a masterful evaluation function.
         """
@@ -157,20 +153,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        lastAgent = gameState.getNumAgents() - 1
-        def minMax(depth, agent, treeGameState, agentAction):
-            if depth == 0: 
-                print('end')
-            else:
-                depth-=1
-                for action in treeGameState.getLegalActions(agent):
-                    treeGameState.generateSuccessor(agent)
-                if agent < lastAgent:
-
-                    
-
-
-    
+        util.raiseNotDefined()
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
