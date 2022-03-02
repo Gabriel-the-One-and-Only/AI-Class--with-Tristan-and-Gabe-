@@ -13,6 +13,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from typing_extensions import Self
 from util import manhattanDistance
 from game import Directions
 import random, util
@@ -73,32 +74,29 @@ class ReflexAgent(Agent):
         newFood = successorGameState.getFood()
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-        ghostPositions = currentGameState.getGhostPositions()
-        #ghostPositions = successorGameState.getGhostPositions() #this does not work, cannot tell where ghosts will be
-        score = successorGameState.getScore()
-        
-        #for x in newFood:
-        #    manhattanDistance(newPos, x) #should make the agent minimize its distance to all pellets
-
-
-        
-        for x in newFood.asList():
-            score =- 5/manhattanDistance(newPos, x) #subtract from the score depending on distance from nearest pellet 
-            """ if manhattanDistance(newPos, x) == 0:
-                print("this code ran")
-                score =+ 1000 """
-            
-        for x  in ghostPositions: #or newPos == currentGameState.getPacmanPosition(): #this should discourage pacman from running into a ghost.
-            if manhattanDistance(newPos, x) < 2:
-                #print("this code ran")
-                score = -10000
-
-        if newPos == currentGameState.getPacmanPosition():#this forces pacman to move each time (nulls stay move)
-            score = -10000
-
+        newGhostPositions = successorGameState.getGhostPositions()
         "*** YOUR CODE HERE ***"
-        print(score)
-        return score
+        
+        scoreMod = 0
+        newFood = newFood.asList()
+        currPos = currentGameState.getPacmanPosition()
+        for ghost in successorGameState.getGhostPositions():
+            if manhattanDistance(newPos, ghost) < 3 or newPos == currPos:
+                scoreMod -= 100
+        for food  in newFood:
+            
+            if manhattanDistance(food,newPos) == 0:
+                scoreMod += 5
+            elif manhattanDistance(newPos,food) < 3:
+                scoreMod += 0.25
+            elif manhattanDistance(newPos,food) < 6:
+                scoreMod += 0.125
+            
+
+
+
+        print (scoreMod, action, newFood)
+        return successorGameState.getScore() + scoreMod
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -159,7 +157,20 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        lastAgent = gameState.getNumAgents() - 1
+        def minMax(depth, agent, treeGameState, agentAction):
+            if depth == 0: 
+                print('end')
+            else:
+                depth-=1
+                for action in treeGameState.getLegalActions(agent):
+                    treeGameState.generateSuccessor(agent)
+                if agent < lastAgent:
+
+                    
+
+
+    
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
