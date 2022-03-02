@@ -1,0 +1,36 @@
+def breadthFirstSearch(problem):
+    """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
+    from util import Queue
+
+    #initialize variables
+    PathToReturn = Queue()
+    path = Queue()
+    visited = set()
+    queue = Queue() #queue for unvisited children
+    
+    #start case
+    root = problem.getStartState() #secure the root
+    visited.add(root) #add root to visited nodes
+    queue.push(root)
+    path.push([])
+
+    while not queue.isEmpty(): #while the queue is not empty, continue exploring
+
+        #get current node and path
+        curr = queue.pop()
+        currpath = path.pop()
+
+        if problem.isGoalState(curr):
+           print("Found it!") #this is the goal state
+           PathToReturn = currpath
+           break
+        for x in problem.getSuccessors(curr):
+            if(x[0] in visited): #root is already in visited, and is the first case, so its children will be added
+                #print("A node was not added to queue.")
+                continue #do not put this in queue
+            visited.add(x[0])
+            path.push(currpath + [x[1]]) #appends the path
+            queue.push(x[0]) #adds children info to queue   
+
+    return PathToReturn

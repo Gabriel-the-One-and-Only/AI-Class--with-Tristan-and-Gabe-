@@ -1,0 +1,28 @@
+This project was done by Tristan Jibbens and Gabriel Shultz
+
+Q1-1: Is the exploration order what you would have expected? Does Pacman actually go to all the explored squares on his way to the goal?
+
+Yes, the exploration order is what was expected. The searched route starts by exploring a paths first successor (which appears to favor West and South expansion first).
+Pacman does not travel all explored nodes, only the ones that were on the successful path and not popped off the movement stack when exploring.
+Our DFS code returns a path of 130 and exapanded 146 nodes on the mediumMaze layout. Pacman only travels the 130 nodes on the path.
+
+Q1-2: Is this a least cost solution? If not, think about what depth-first search is doing wrong.
+No, DFS is just returning the first path it finds to the goal, it is not exploring all paths from the start state to return the optimal one.
+The minimum cost path in the medium maze has a cost of 68. Depth first search does not return this. DFS in the case of the medium maze, 
+heads West from the start instead of South which is the most optimal route. This causes its return path to have a detour to the West that the,
+optimal path does not have. Again, the nature of DFS picking the first path option and traversing it and backtracking when it reaches a dead end or
+previously visited node results in it not finding the most optimal path in a graph.
+
+Q4-1: What happens on openMaze for the various search strategies?
+
+DFS returns a path with cost of 298. It searches in a left, down, then right pattern. Its path is very long as it bounces from the walls of the "funnel" 
+as it moves down to the goal.
+
+BFS returns a path with cost 54 and explores almost every node in the graph. This graph has many different paths with the same optimal cost of 54. However,
+BFS returns the one which goes down first, then left to the mouth of the "funnel", and then heads down to the same level as the goal, and then left again towards the goal.
+
+UCS performs the same as BFS on the openMaze layout. A path cost of 54 and it explored 682 nodes. This was expected, because there are no dots on this path, and all nodes have a cost
+of 1, so UCS devolves into BFS for this case.
+
+Again, A* returns the optimal path of cost 54. However, using the manhattan distan heuristic it expanded 535 nodes which is significantly less than BFS or UCS. The euclidean heuristic
+expanded more nodes at 550, but was still better than BFS and UCS.

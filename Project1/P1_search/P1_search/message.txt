@@ -1,0 +1,67 @@
+PS C:\Users\Gabri\OneDrive\Desktop\AIclass\Project1\P1_search\P1_search> python pacman.py -l tinyCorners -p SearchAgent -a fn=bfs,prob=CornersProblem
+[SearchAgent] using function bfs
+[SearchAgent] using problem type CornersProblem
+((4, 5), [False, False, False, False]) was added to visited.
+((4, 6), [False, False, False, False]) was added to visited.
+((5, 5), [False, False, False, False]) was added to visited.
+((3, 5), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((4, 5), [False, False, False, False])
+((5, 6), [False, False, False, False]) was added to visited.
+((3, 6), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((5, 6), [False, False, False, False])
+((6, 5), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((4, 5), [False, False, False, False])
+This node was not added to queue. ((3, 6), [False, False, False, False])
+This node was not added to queue. ((4, 5), [False, False, False, False])
+((2, 5), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((5, 5), [False, False, False, False])
+((6, 6), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((4, 6), [False, False, False, False])
+This node was not added to queue. ((3, 5), [False, False, False, False])
+This node was not added to queue. ((4, 6), [False, False, False, False])
+((2, 6), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((6, 6), [False, False, False, False])
+((6, 4), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((5, 5), [False, False, False, False])
+This node was not added to queue. ((2, 6), [False, False, False, False])
+This node was not added to queue. ((3, 5), [False, False, False, False])
+((1, 5), [False, False, False, False]) was added to visited.
+This node was not added to queue. ((6, 5), [False, False, False, True])
+This node was not added to queue. ((5, 6), [False, False, False, True])
+This node was not added to queue. ((2, 5), [False, False, False, True])
+This node was not added to queue. ((3, 6), [False, False, False, True])
+((1, 6), [False, False, False, True]) was added to visited.
+This node was not added to queue. ((6, 5), [False, False, False, True])
+((6, 3), [False, False, False, True]) was added to visited.
+This node was not added to queue. ((1, 6), [False, False, False, True])
+((1, 4), [False, False, False, True]) was added to visited.
+This node was not added to queue. ((2, 5), [False, False, False, True])
+This node was not added to queue. ((1, 5), [False, True, False, True])
+This node was not added to queue. ((2, 6), [False, True, False, True])
+This node was not added to queue. ((6, 4), [False, True, False, True])
+((5, 3), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((1, 5), [False, True, False, True])
+((1, 3), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((6, 3), [False, True, False, True])
+((4, 3), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((1, 4), [False, True, False, True])
+((1, 2), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((5, 3), [False, True, False, True])
+((3, 3), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((1, 3), [False, True, False, True])
+((1, 1), [False, True, False, True]) was added to visited.
+((3, 2), [False, True, False, True]) was added to visited.
+This node was not added to queue. ((4, 3), [False, True, False, True])
+This node was not added to queue. ((1, 2), [True, True, False, True])
+This node was not added to queue. ((3, 3), [True, True, False, True])
+((3, 1), [True, True, False, True]) was added to visited.
+This node was not added to queue. ((3, 2), [True, True, False, True])
+((4, 1), [True, True, False, True]) was added to visited.
+((5, 1), [True, True, False, True]) was added to visited.
+This node was not added to queue. ((3, 1), [True, True, False, True])
+((6, 1), [True, True, False, True]) was added to visited.
+This node was not added to queue. ((4, 1), [True, True, False, True])
+Found it!
+Path found with total cost of 12 in 0.0 seconds
+Search nodes expanded: 25
+PS C:\Users\Gabri\OneDrive\Desktop\AIclass\Project1\P1_search\P1_search>
