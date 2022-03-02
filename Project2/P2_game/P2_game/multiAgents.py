@@ -13,7 +13,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
-from typing_extensions import Self
+
 from util import manhattanDistance
 from game import Directions
 import random, util
@@ -157,15 +157,37 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
+        
         lastAgent = gameState.getNumAgents() - 1
-        def minMax(depth, agent, treeGameState, agentAction):
-            if depth == 0: 
-                print('end')
-            else:
-                depth-=1
-                for action in treeGameState.getLegalActions(agent):
-                    treeGameState.generateSuccessor(agent)
-                if agent < lastAgent:
+        def minMax(depth, agent, treeGameState):
+            
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                return [self.evaluationFunction(treeGameState),0]
+            bestValue = []
+            for action in treeGameState.getLegalActions(agent):
+                    
+                if(agent == lastAgent):
+                    node = minMax(depth-1, 0, treeGameState.generateSuccessor(agent, action))
+                else:
+                    node = minMax(depth, agent+1, treeGameState.generateSuccessor(agent, action))
+                
+                if bestValue == []:
+                    bestValue = node
+                if(agent == 0 and node[0] >= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action
+                if(agent > 0 and node[0] <= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action        
+            return bestValue
+                
+        return minMax(self.depth, self.index, gameState)[1]
+
+        
+                    
+
+
+               
 
                     
 
