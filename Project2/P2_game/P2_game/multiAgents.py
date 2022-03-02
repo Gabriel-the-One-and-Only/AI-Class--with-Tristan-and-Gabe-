@@ -157,25 +157,31 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        
+        #Declaring index number variable of last agent
         lastAgent = gameState.getNumAgents() - 1
+        #Creating a recursive function to create the tree
         def minMax(depth, agent, treeGameState):
-            
+            #checking if any of the leaf nodes were reached
             if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
                 return [self.evaluationFunction(treeGameState),0]
+            #This variable will hold the best action the agent can take and the score that would occur if all agents choose the optimal option
             bestValue = []
+            #Checking all legal actions
             for action in treeGameState.getLegalActions(agent):
-                    
+                #Going down the tree to the next agent. if the tree goes down 1 depth, the depth variable decriments    
                 if(agent == lastAgent):
                     node = minMax(depth-1, 0, treeGameState.generateSuccessor(agent, action))
                 else:
                     node = minMax(depth, agent+1, treeGameState.generateSuccessor(agent, action))
-                
+                #if this is the first cycle of the loop, set the first action to be the best one
                 if bestValue == []:
                     bestValue = node
+                #if the agent is pacman and the score is higher, bestvalue is replaced with the new score and the action it takes to get there
                 if(agent == 0 and node[0] >= bestValue[0]):
                     bestValue[0] = node[0]
                     bestValue[1] = action
+                #if the agent is a ghost and the score is lower, bestvalue is replaced with the new score and the action it takes to get there
                 if(agent > 0 and node[0] <= bestValue[0]):
                     bestValue[0] = node[0]
                     bestValue[1] = action        
