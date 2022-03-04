@@ -70,28 +70,35 @@ class ReflexAgent(Agent):
         newFood = successorGameState.getFood()
         newGhostStates = successorGameState.getGhostStates()
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-        newGhostPositions = successorGameState.getGhostPositions()
         "*** YOUR CODE HERE ***"
-        
-        scoreMod = 0
-        newFood = newFood.asList()
+        newGhostPositions = successorGameState.getGhostPositions() #This does not return the actual moves of the ghosts just repeats the old positions; invalid
+
+        scoreMod = 0 #score modifier that will be applied
+        newFood = newFood.asList() #converts boolean grid to coordinates.
         currPos = currentGameState.getPacmanPosition()
-        for ghost in successorGameState.getGhostPositions():
-            if manhattanDistance(newPos, ghost) < 3 or newPos == currPos:
-                scoreMod -= 100
+        
+        for ghost in currentGameState.getGhostPositions():
+            print("This is the distance to the ghost: ", manhattanDistance(newPos, ghost))
+            if manhattanDistance(newPos, ghost) < 2: # or newPos == currPos: #this line makes pacman avoid ghosts and optionally always move.
+                scoreMod -= 1000 #discourages this idea
+                #print("This code ran") debug line
+                
         for food  in newFood:
             
-            if manhattanDistance(food,newPos) == 0:
+            #first attempt
+            """  if manhattanDistance(food,newPos) == 0: #This does not do anything
                 scoreMod += 5
             elif manhattanDistance(newPos,food) < 3:
                 scoreMod += 0.25
             elif manhattanDistance(newPos,food) < 6:
                 scoreMod += 0.125
+            elif manhattanDistance(newPos, food) > 5:
+                scoreMod += 0.05 """
+            scoreMod += 1/manhattanDistance(newPos, food) #prioritizes closer dots but still makes it aware of farther ones.
             
-
-
-
-        print (scoreMod, action, newFood)
+            
+        #print (scoreMod, action, newFood) #debug lines
+        #print(scoreMod)
         return successorGameState.getScore() + scoreMod
 
 def scoreEvaluationFunction(currentGameState):
