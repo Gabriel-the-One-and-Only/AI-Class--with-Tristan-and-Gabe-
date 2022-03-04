@@ -229,7 +229,44 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #Declaring index number variable of last agent
+        lastAgent = gameState.getNumAgents() - 1
+        #Creating a recursive function to create the tree
+        def expecMax(depth, agent, treeGameState):
+            #checking if any of the leaf nodes were reached
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
+                return [self.evaluationFunction(treeGameState),0]
+            #This variable will hold the best action the agent can take and the score that would occur if all agents choose the optimal option
+            bestValue = []
+            #this value will hold the score sum of all possible actions taken by agent if they are a ghost
+            expectValue = 0
+            #This value holds the number of legal actions an agent can do
+            legalActionNum = 0
+            #Checking all legal actions
+            for action in treeGameState.getLegalActions(agent):
+                #Going down the tree to the next agent. if the tree goes down 1 depth, the depth variable decriments    
+                if(agent == lastAgent):
+                    node = expecMax(depth-1, 0, treeGameState.generateSuccessor(agent, action))
+                else:
+                    node = expecMax(depth, agent+1, treeGameState.generateSuccessor(agent, action))
+                #if this is the first cycle of the loop, set the first action to be the best one
+                if bestValue == []:
+                    bestValue = node
+                #if the agent is pacman and the score is higher, bestvalue is replaced with the new score and the action it takes to get there
+                if(agent == 0 and node[0] >= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action
+                #if the agent is a ghost, add score to score sum
+                if(agent > 0 ):
+                    expectValue += node[0]
+                legalActionNum += 1
+            #if the agent was a ghost, set the 'best' value variable to the avereged value of all the choices
+            if agent>0:
+                bestValue[0] = expectValue/legalActionNum    
+            return bestValue
+                
+        return expecMax(self.depth, self.index, gameState)[1]
 
 def betterEvaluationFunction(currentGameState):
     """
@@ -239,7 +276,19 @@ def betterEvaluationFunction(currentGameState):
     DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    successorGameState = currentGameState.generatePacmanSuccessor(action)
+    newPos = successorGameState.getPacmanPosition()
+    newFood = successorGameState.getFood()
+    newGhostStates = successorGameState.getGhostStates()
+    newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
+    for ghost in currentGameState.getGhostPositions():
+            print("This is the distance to the ghost: ", manhattanDistance(newPos, ghost))
+            if manhattanDistance(newPos, ghost) < 2: # or newPos == currPos: #this line makes pacman avoid ghosts and optionally always move.
+                scoreMod -= 1000 #discourages this idea
+    for food in newFood:
+            scoreMod += 1/manhattanDistance(newPos, food)
+
+    return successorGameState.getScore() + scoreMod
 # Abbreviation
 better = betterEvaluationFunction
