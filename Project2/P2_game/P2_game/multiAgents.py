@@ -273,22 +273,56 @@ def betterEvaluationFunction(currentGameState):
     Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
     evaluation function (question 5).
 
-    DESCRIPTION: <write something here so we know what you did>
+    DESCRIPTION: <This code used a combination of of inverted manhattan distance formulas for the food
+    and power pellets in order to properly weigh the potentialy most optimal way to traverse the arena 
+    without concern for the ghosts initially. A negative incentive is also placed for yet to be eaten 
+    food and power pellets. The ghosts fall into the equation if the ghosts are one space away or if 
+    a ghost is scared and the manhattan distance to the ghost is less than the remaining time 
+    that the ghost is scared>
     """
     "*** YOUR CODE HERE ***"
-    successorGameState = currentGameState.generatePacmanSuccessor(action)
-    newPos = successorGameState.getPacmanPosition()
-    newFood = successorGameState.getFood()
-    newGhostStates = successorGameState.getGhostStates()
+    #initializing needed variables
+    #pacman position
+    pos = currentGameState.getPacmanPosition()
+    #position of all food
+    foodPos = currentGameState.getFood().asList()
+    #positions of all ghosts
+    newGhostStates = currentGameState.getGhostStates()
+    #time left for each ghost to be scared
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-
+    #position of power pellets
+    powerPellets = currentGameState.getCapsules()
+    #score modifier
+    scoreMod = 0
+    #number of ghosts
+    ghostCount = 0
+    #food left for pacman to eat
+    totalFood = 0
+    #pellets left to eat
+    totalPellets = 0
+    # loop to check if a ghost fits either senario to enable their involvment
     for ghost in currentGameState.getGhostPositions():
-            print("This is the distance to the ghost: ", manhattanDistance(newPos, ghost))
-            if manhattanDistance(newPos, ghost) < 2: # or newPos == currPos: #this line makes pacman avoid ghosts and optionally always move.
-                scoreMod -= 1000 #discourages this idea
-    for food in newFood:
-            scoreMod += 1/manhattanDistance(newPos, food)
-
-    return successorGameState.getScore() + scoreMod
+        ghostDistance = manhattanDistance(pos, ghost)
+        #old debug code
+        'print(newScaredTimes)'
+        'print("This is the distance to the ghost: ", manhattanDistance(newPos, ghost))'
+        if ghostDistance < newScaredTimes[ghostCount]:
+            scoreMod += 50
+        elif ghostDistance < 2:
+            scoreMod -= 1000 #discourages this idea
+        ghostCount += 1
+    #calculating one-forth of the inverse of the manhattan distance of each food piece for the score modification
+    for food in foodPos:
+        foodVal = manhattanDistance(pos, food)
+        scoreMod = scoreMod + 0.25/foodVal
+        totalFood += 1
+    #doing the same calculation as the food for each pellet * 2
+    for pellet in powerPellets:
+        scoreMod = scoreMod + 0.5/manhattanDistance(pos, pellet)
+        totalPellets += 1
+    #discouraging uneaten food and pellets to ensure consumption
+    scoreMod -= (totalFood + 3*totalPellets)
+    #returns in-game score plus modifier
+    return currentGameState.getScore() + scoreMod
 # Abbreviation
 better = betterEvaluationFunction
