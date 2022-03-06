@@ -13,7 +13,9 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+import sys
 
+from sqlalchemy import null
 from util import manhattanDistance
 from game import Directions
 import random, util
@@ -161,6 +163,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
+        #depth = 5
         #Declaring index number variable of last agent
         lastAgent = gameState.getNumAgents() - 1
         #Creating a recursive function to create the tree
@@ -214,7 +217,58 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #Declaring index number variable of last agent
+        lastAgent = gameState.getNumAgents() - 1
+        #Creating a recursive function to create the tree
+        def minMax(depth, agent, treeGameState, alpha, beta):
+            #checking if any of the leaf nodes were reached
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
+                return [self.evaluationFunction(treeGameState),0]
+            #This variable will hold the best action the agent can take and the score that would occur if all agents choose the optimal option
+            #bestValue = [beta, 0]
+            #worstValue = [alpha, 0]
+            bestValue = [beta, 0]
+            worstValue = [alpha, 0]
+            #Checking all legal actions
+            for action in treeGameState.getLegalActions(agent):
+                #print("This is the best value:", bestValue)
+                #print("This is the worst value:", worstValue)
+                
+                #Going down the tree to the next agent. if the tree goes down 1 depth, the depth variable decriments
+                 
+                if(agent == lastAgent):
+                    node = minMax(depth-1, 0, treeGameState.generateSuccessor(agent, action), worstValue[0], bestValue[0])
+                else:
+                    node = minMax(depth, agent+1, treeGameState.generateSuccessor(agent, action), worstValue[0], bestValue[0])
+                #if this is the first cycle of the loop, set the first action to be the best one and worst one
+                if bestValue == [beta, 0]: #[beta, 0]:
+                    #print("This code ran")
+                    bestValue = node
+                if worstValue == [alpha, 0]: #[alpha, 0]:
+                    #print("This code ran")
+                    worstValue = node
+                #if the agent is pacman and the score is higher, bestvalue is replaced with the new score and the action it takes to get there
+                if(agent == 0 and node[0] >= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action
+                    if(bestValue[0] > beta):
+                        #print("Something was pruned")
+                        return bestValue
+                #if the agent is a ghost and the score is lower, worstValue is replaced with the new score and the action it takes to get there
+                if(agent > 0 and node[0] <= worstValue[0]):
+                    worstValue[0] = node[0]
+                    worstValue[1] = action 
+                    if(worstValue[0] < alpha):
+                        #print("Something was pruned")
+                        return worstValue
+            if(agent == 0):      
+                return bestValue
+            else:
+                return worstValue
+                
+        return minMax(self.depth, self.index, gameState, -sys.maxsize-1, sys.maxsize)[1] #start loop with alpha and beta at max and min representable numbers
+
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
