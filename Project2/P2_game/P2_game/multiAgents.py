@@ -213,7 +213,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     """
 
     def getAction(self, gameState):
-        """
+        '''"""
         Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
@@ -252,22 +252,107 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
                 if(agent == 0 and node[0] >= bestValue[0]):
                     bestValue[0] = node[0]
                     bestValue[1] = action
-                    if(bestValue[0] > beta):
+                    if(bestValue[0] >= beta):
+                        print("Max agent pruned on:", bestValue[0], " because beta was ", beta)
                         #print("Something was pruned")
                         return bestValue
                 #if the agent is a ghost and the score is lower, worstValue is replaced with the new score and the action it takes to get there
-                if(agent > 0 and node[0] <= worstValue[0]):
+                if(agent > 0 and node[0] <= worstValue[0]): 
                     worstValue[0] = node[0]
                     worstValue[1] = action 
-                    if(worstValue[0] < alpha):
+                    if(worstValue[0] <= alpha):
                         #print("Something was pruned")
                         return worstValue
+                    
             if(agent == 0):      
                 return bestValue
             else:
                 return worstValue
                 
-        return minMax(self.depth, self.index, gameState, -sys.maxsize-1, sys.maxsize)[1] #start loop with alpha and beta at max and min representable numbers
+        return minMax(self.depth, self.index, gameState, -sys.maxsize-1, sys.maxsize)[1] #start loop with alpha and beta at max and min representable numbers'''
+        #Declaring index number variable of last agent
+        lastAgent = gameState.getNumAgents() - 1
+        '''#Creating a recursive function to create the tree
+        def minMax(depth, agent, treeGameState, alpha, beta):
+            #checking if any of the leaf nodes were reached
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
+                return [self.evaluationFunction(treeGameState),0]
+            #This variable will hold the best action the agent can take and the score that would occur if all agents choose the optimal option
+            bestValue = []
+            #Checking all legal actions
+            for action in treeGameState.getLegalActions(agent):
+                #Going down the tree to the next agent. if the tree goes down 1 depth, the depth variable decriments    
+                if(agent == lastAgent):
+                    node = minMax(depth-1, 0, treeGameState.generateSuccessor(agent, action), alpha, beta)
+                else:
+                    node = minMax(depth, agent+1, treeGameState.generateSuccessor(agent, action), alpha, beta)
+                #if this is the first cycle of the loop, set the first action to be the best one
+                if bestValue == []:
+                    bestValue = node
+                #if the agent is pacman and the score is higher, bestvalue is replaced with the new score and the action it takes to get there
+                if(agent == 0 and node[0] >= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action
+                    if bestValue[0] < alpha:
+                        alpha = bestValue[0]
+                    if bestValue[0] > beta: #prune the rest
+                        return bestValue
+                         
+                #if the agent is a ghost and the score is lower, bestvalue is replaced with the new score and the action it takes to get there
+                if(agent > 0 and node[0] <= bestValue[0]):
+                    bestValue[0] = node[0]
+                    bestValue[1] = action 
+                    if bestValue[0] > beta:
+                        beta = bestValue[0]
+                    if bestValue[0] < alpha: #prune the rest
+                        return bestValue      
+            return bestValue
+        '''
+        #copied almost exactly from page 167 in the textbook
+        def maxVal(depth, agent, treeGameState, alpha, beta):
+            bestValue = []
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
+                return [self.evaluationFunction(treeGameState),0]
+            for action in treeGameState.getLegalActions(agent):
+                for ghost in range(lastAgent):
+                    node = minVal(depth, ghost+1, treeGameState.generateSuccessor(agent, action), alpha, beta)
+                    if bestValue == []:
+                        bestValue.append(node[0])
+                        bestValue.append(node[1])
+                        bestValue[1] = action
+                    if node[0] > bestValue[0]:
+                        bestValue[0] = node[0]
+                        bestValue[1] = action
+                        if bestValue[0] > alpha:
+                            alpha = bestValue[0]
+                    if bestValue[0] >= beta: #prune the rest
+                        return bestValue
+            return bestValue
+                        
+        
+        def minVal(depth, agent, treeGameState, alpha, beta):
+            bestValue = []
+            if depth <= 0 or treeGameState.isWin() or treeGameState.isLose(): 
+                #returns the score of game if this state was reached
+                return [self.evaluationFunction(treeGameState),0]
+            for action in treeGameState.getLegalActions(agent):
+                node = maxVal(depth-1, 0, treeGameState.generateSuccessor(agent, action), alpha, beta)
+                if bestValue == []:
+                    bestValue.append(node[0])
+                    bestValue.append(node[1])
+                if node[0] < bestValue[0]:
+                    bestValue[0] = node[0]
+                    bestValue[1] = action
+                    if bestValue[0] < beta:
+                        beta = bestValue[0]
+                if bestValue[0] <= alpha: #prune the rest
+                    return bestValue
+            return bestValue
+        move = maxVal(self.depth, self.index, gameState, -sys.maxsize-1, sys.maxsize)
+        print("Move: ", move)
+        return move[1]
 
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
