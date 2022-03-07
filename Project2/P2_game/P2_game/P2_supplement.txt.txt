@@ -1,0 +1,36 @@
+Project 2 Adversarial Search
+by Tristan Jibben and Gabriel Shultz
+3/7/2022
+
+Q1.1 
+We decided to use a a score modifier that we would add to the originally returned value of gamestate.getScore().
+We used the sum of inverse manhattan distances from pacman to all food for the score modifier.
+This encouraged pacman to move to food closer to him and care less about those far away.
+If he was within 2 manhattan distance units away from a ghost after a certain action that was heavily
+dicouraged with a steep negative addition to the modifier. We found it had to be a distance of 2, because otherwise,
+pacman would move into a spot that a ghost was also going to that turn.
+This agent works decently well with one ghost but is unable to contend with multiple ghosts well as it cannot see that it is being trapped.
+
+
+Q2.1
+The paragragh above the question kind of spoils this, however this action is caused by minimax expecting the adversary to make the best decision.
+These ghosts are random. So pacman's fate is not decided yet, however the search algorithm thinks it is.  If it stays were it is, its score goes down by a game tick,
+however, if it kills itself by running into a ghost, its score will be one less negative as the ghost will not be able to make its move.
+
+
+Q3.1
+For depth = 1 it was killed when it got trapped by both ghost and again stayed on the right side of the map.
+For depth = 2 it was killed by the blue ghost after a while. This happened because it was suck in a dead end space, and by the time the search considered the ghost, he
+could not have gotten away.
+For depth = 3 it hung out for a long time going back and forth on the right side of the map. Because once it got most of the dots on that side it could not see the rest.
+For depth = 4  it was killed by a ghost when it went into the ghost spawning area and the ghost came back and trapped pacman. It also ran considerably slower. Upon replaying
+it it won once and lost again. Its a theme that once it thinks its trapped, pacman will run into the ghosts.
+
+Q4.1
+With just alpha-beta agent, pacman loses every game because it assumes the ghosts are playing optimally and it sees it as the best way to imporve its score.
+Meanwhile with the same set of tests, the Expectimax agent will win half the time. Because the chance of the ghost not killing pacman is incentive enough to make him want
+to live to see another move. The alpha-beta agent lost every game.
+
+
+Q5.1 
+Tristan you should do this.

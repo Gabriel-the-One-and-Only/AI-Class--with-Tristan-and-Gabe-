@@ -183,9 +183,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
                     node = minMax(depth, agent+1, treeGameState.generateSuccessor(agent, action))
                 #if this is the first cycle of the loop, set the first action to be the best one
                 if bestValue == []:
-                    bestValue = node
-                    #bestValue.append(node[0])
-                    #bestValue.append(action)
+                    #bestValue = node
+                    bestValue.append(node[0])
+                    bestValue.append(action)
                 #if the agent is pacman and the score is higher, bestvalue is replaced with the new score and the action it takes to get there
                 if(agent == 0 and node[0] >= bestValue[0]):
                     bestValue[0] = node[0]
@@ -193,9 +193,10 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 #if the agent is a ghost and the score is lower, bestvalue is replaced with the new score and the action it takes to get there
                 if(agent > 0 and node[0] <= bestValue[0]):
                     bestValue[0] = node[0]
-                    bestValue[1] = action        
-            return bestValue
+                    bestValue[1] = action
                 
+            return bestValue
+              
         return minMax(self.depth, self.index, gameState)[1]
 
         
