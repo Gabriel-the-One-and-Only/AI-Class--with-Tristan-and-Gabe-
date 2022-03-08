@@ -33,4 +33,7 @@ to live to see another move. The alpha-beta agent lost every game.
 
 
 Q5.1 
-Tristan you should do this.
+When we were planning to tackle the better evaluation function, we wanted to make sure to have all items in the game included in the evaluation, so on top of having 
+everything previously included from the regular evaluation function, we also wanted to make sure that pacman would go for the ghost if it was scared and if pacman 
+could get there in the scared time remaining. We also wanted to make sure that power pellets were included and worth more than regular pellets to prioritize them
+and score more points
