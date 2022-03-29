@@ -77,9 +77,12 @@ class DiscreteDistribution(dict):
         {}
         """
         "*** YOUR CODE HERE ***"
+        #grab total of all weights
         totalVal = self.total()
+        #if there is nothing, do nothing
         if totalVal is 0:
             return
+        #divide every items weight by the total of all weights
         for item in self.keys():
             self[item] = self[item]/totalVal
         return
@@ -106,20 +109,25 @@ class DiscreteDistribution(dict):
         0.0
         """
         "*** YOUR CODE HERE ***"
+        #if not normalized, do so
         if self.total() is not 1:
             self.normalize()
+        #grab a sorted list of items, mainly done to make a subscriptable object
         itemList = sorted(self.items())
-        
+        #random value between 0 and 1
         rand = random.random()
+        #setting up variables 
         index = -1
         sumDis = 0
+        #simulates sampling with weights by summing
+        #weights together and comparing to the rand variable,
+        #if the rand variable becomes less than the total 
         for value in itemList:
             index += 1
             sumDis+= value[1]
             if sumDis > rand:
-                break
-            
-            
+                break   
+        #return item key
         return itemList[index][0]
         
 
