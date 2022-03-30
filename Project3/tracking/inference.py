@@ -420,15 +420,22 @@ class ParticleFilter(InferenceModule):
         #Grabbing Pacman and Jail position
         pacmanPosition = gameState.getPacmanPosition()
         jailPosition = self.getJailPosition()
+        #Setting up a fresh DiscreteDistribution
         newBelief = DiscreteDistribution()
-
+        #For each particle get the ovservation probability of that particle
         for particle in self.particles:
+            #Added instead of just setting equal due to the chance of more
+            #than one particle being in the same position
             newBelief[particle] += self.getObservationProb(observation, pacmanPosition, particle, jailPosition)
+        #if the total weight of all particles is not 0
         if newBelief.total() != 0:
+            #setting the beliefs to the new beliefs and normalizing said beliefs
             self.beliefs = newBelief
             self.beliefs.normalize()
+            #redistributing same number of original particles via sampling updated beliefs
             for particleNum in range(len(self.particles)):
                 self.particles[particleNum] = self.beliefs.sample()
+        #if the total weight of all particles is 0, initialize particles
         else:
             self.initializeUniformly(gameState)
             
