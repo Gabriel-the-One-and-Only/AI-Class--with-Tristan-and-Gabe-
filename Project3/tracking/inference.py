@@ -80,7 +80,7 @@ class DiscreteDistribution(dict):
         #grab total of all weights
         totalVal = self.total()
         #if there is nothing, do nothing
-        if totalVal is 0:
+        if totalVal == 0:
             return
         #divide every items weight by the total of all weights
         for item in self.keys():
@@ -110,7 +110,7 @@ class DiscreteDistribution(dict):
         """
         "*** YOUR CODE HERE ***"
         #if not normalized, do so
-        if self.total() is not 1:
+        if self.total() != 1:
             self.normalize()
         #grab a sorted list of items, mainly done to make a subscriptable object
         itemList = sorted(self.items())
@@ -319,9 +319,16 @@ class ExactInference(InferenceModule):
         position is known.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
-
+        #Grabbing Pacman and Jail position
+        pacmanPosition = gameState.getPacmanPosition()
+        jailPosition = self.getJailPosition()
+        #For all legal ghost positions, get the observation probability,
+        #then, multiply it by what the belief is of the positions of the ghost and have that be the answer to the belief of the ghost positions
+        for ghostPosition in self.allPositions:
+            self.beliefs[ghostPosition] *= self.getObservationProb(observation, pacmanPosition, ghostPosition, jailPosition)
+        #normalize the beliefs
         self.beliefs.normalize()
+        
 
     def elapseTime(self, gameState):
         """
