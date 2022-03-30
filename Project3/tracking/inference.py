@@ -14,7 +14,9 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from decimal import ROUND_UP
 import itertools
+from math import floor
 import random
 import busters
 import game
@@ -378,7 +380,29 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        #determine how often a particle should be placed in the presumably ordered list of positions
+        mod = floor(len(self.allPositions)/self.numParticles)
+        if mod < 1:
+            mod = 1 #cant put more than one particle per location
+        index = 0
+        for position in self.legalPositions:
+            if(not index % mod): #true if modulus result is zero
+                self.particles.append(position)#if so, add the particle (position to the self.particles list)
+            index += 1
+        while self.numParticles < len(self.particles):
+            #randomly remove particles from even spread to get correct number (mod overestimates)
+            self.particles.remove(random.randint(0, len(self.particles)-1))
+            
+        #create the distrubution
+        beliefs = DiscreteDistribution()
+        #geting the new position distributions for all of the original ghost position guesses
+        for particle in self.particles:
+            beliefs[particle] = 1 #set the belief at that position to one
+        beliefs.normalize() #normalize the distribution
+        #setting beliefs to the new beliefs
+        self.beliefs = beliefs #update the objects belief distrubution
+        #print("There are this many particles: ", len(self.particles))
+
 
     def observeUpdate(self, observation, gameState):
         """
@@ -412,7 +436,8 @@ class ParticleFilter(InferenceModule):
         This function should return a normalized distribution.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        
+        return self.beliefs #return the objects current distribution
 
 
 class JointParticleFilter(ParticleFilter):
