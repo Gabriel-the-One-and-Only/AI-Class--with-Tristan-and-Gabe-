@@ -208,7 +208,7 @@ class InferenceModule:
             if noisyDistance is None:
                 return 1
             return 0
-        #if ghost is in jail and their is no noisy distance, then return 0
+        #if ghost is in not jail and there is no noisy distance, then return 0
         if noisyDistance is None:
             return 0
         #if not a special case, return P(noisyDistance | pacmanPosition, ghostPosition) == P(noisyDistance | trueDistance)
