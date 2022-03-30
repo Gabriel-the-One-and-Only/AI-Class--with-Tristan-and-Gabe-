@@ -1,2 +1,16 @@
 Project3/tracking/__pycache__/bustersAgents.cpython-39.pyc
 Project3/tracking/__pycache__/textDisplay.cpython-39.pyc
+Project3/tracking/__pycache__/busters.cpython-39.pyc
+Project3/tracking/__pycache__/bustersAgents.cpython-39.pyc
+Project3/tracking/__pycache__/distanceCalculator.cpython-39.pyc
+Project3/tracking/__pycache__/game.cpython-39.pyc
+Project3/tracking/__pycache__/grading.cpython-39.pyc
+Project3/tracking/__pycache__/inference.cpython-39.pyc
+Project3/tracking/__pycache__/keyboardAgents.cpython-39.pyc
+Project3/tracking/__pycache__/layout.cpython-39.pyc
+Project3/tracking/__pycache__/pacman.cpython-39.pyc
+Project3/tracking/__pycache__/projectParams.cpython-39.pyc
+Project3/tracking/__pycache__/testClasses.cpython-39.pyc
+Project3/tracking/__pycache__/testParser.cpython-39.pyc
+Project3/tracking/__pycache__/trackingTestClasses.cpython-39.pyc
+Project3/tracking/__pycache__/util.cpython-39.pyc
