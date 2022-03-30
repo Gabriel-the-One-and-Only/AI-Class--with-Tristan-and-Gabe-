@@ -380,8 +380,17 @@ class ParticleFilter(InferenceModule):
         """
         self.particles = []
         "*** YOUR CODE HERE ***"
+        #need to handle the case where there are more particles than positions
+        particlesLeft = self.numParticles
+        while(particlesLeft > len(self.legalPositions)): #while there are more particles than positions, place a particle in each position
+            for position in self.legalPositions:
+                self.particles.append(position)#if so, add the particle (position to the self.particles list)
+            particlesLeft -= len(self.legalPositions)
+        
+        
         #determine how often a particle should be placed in the presumably ordered list of positions
-        mod = floor(len(self.allPositions)/self.numParticles)
+        #mod = floor(len(self.allPositions)/self.numParticles)
+        mod = floor(len(self.legalPositions)/particlesLeft)
         if mod < 1:
             mod = 1 #cant put more than one particle per location
         index = 0
@@ -391,7 +400,7 @@ class ParticleFilter(InferenceModule):
             index += 1
         while self.numParticles < len(self.particles):
             #randomly remove particles from even spread to get correct number (mod overestimates)
-            self.particles.remove(random.randint(0, len(self.particles)-1))
+            self.particles.pop(random.randint(0, len(self.particles)-1))
             
         #create the distrubution
         beliefs = DiscreteDistribution()
