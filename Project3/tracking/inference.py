@@ -340,7 +340,18 @@ class ExactInference(InferenceModule):
         current position is known.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        #Setting up a new discrete distribution for the new beliefs (using self.beliefs was attempted where newBelief is in the code but didn't work out)
+        newBelief = DiscreteDistribution()
+        #geting the new position distributions for all of the original ghost position guesses
+        for oldPos in self.allPositions:
+            #grabing probabilities for each legal position the ghost can move to given initial position
+            newPosDist = self.getPositionDistribution(gameState, oldPos)
+            #getting new belief distributions for all of the new positions at t+1
+            for position in newPosDist:
+                #adding due to overlap from other positions
+                newBelief[position] += self.beliefs[oldPos] * newPosDist[position]
+        #setting beliefs to the new beliefs
+        self.beliefs = newBelief
 
     def getBeliefDistribution(self):
         return self.beliefs
