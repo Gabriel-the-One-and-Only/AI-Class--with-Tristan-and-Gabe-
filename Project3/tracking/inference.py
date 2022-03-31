@@ -200,7 +200,7 @@ class InferenceModule:
         """
         Return the probability P(noisyDistance | pacmanPosition, ghostPosition).
         """
-        #busters.getObservationProbability(noisyDistance, trueDistance)
+        
         "*** YOUR CODE HERE ***"
         #If the ghost is in jail
         if ghostPosition is jailPosition:
