@@ -497,9 +497,27 @@ class JointParticleFilter(ParticleFilter):
         should be evenly distributed across positions in order to ensure a
         uniform prior.
         """
-        self.particles = []
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+        self.particles = []
+        self.numGhosts #number of ghosts
+        self.legalPositions #places a ghost may occupy
+        AllPosParticles = list(itertools.product(self.legalPositions, repeat=self.numGhosts)) #creates cartesian product
+        for i in range(self.numParticles):
+            self.particles.append(AllPosParticles[random.randint(0,len(AllPosParticles)-1)])
+        #print(self.particles)  
+        #create the distrubution
+        beliefs = DiscreteDistribution()
+        #geting the new position distributions for all of the original ghost position guesses
+        for particle in self.particles:
+            #print("This is a particle[1]: ", particle[1])
+            #for i in range(self.numGhosts):
+            beliefs[particle] += 1 #set the belief at that position to one
+        beliefs.normalize() #normalize the distribution
+        #setting beliefs to the new beliefs
+        self.beliefs = beliefs #update the objects belief distrubution
+        #print("There are this many particles: ", len(self.particles))
+
+            
 
     def addGhostAgent(self, agent):
         """
@@ -532,7 +550,27 @@ class JointParticleFilter(ParticleFilter):
         the DiscreteDistribution may be useful.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
+                #Grabbing Pacman and Jail position
+        pacmanPosition = gameState.getPacmanPosition()
+        #Setting up a fresh DiscreteDistribution
+        newBelief = DiscreteDistribution()
+        #For each particle get the ovservation probability of that particle
+        for particle in self.particles:
+            for i in range(self.numGhosts):
+            #Added instead of just setting equal due to the chance of more
+            #than one particle being in the same position
+                newBelief[particle] += self.getObservationProb(observation[i], pacmanPosition, particle[i], self.getJailPosition(i))
+        #if the total weight of all particles is not 0
+        if newBelief.total() != 0:
+            #setting the beliefs to the new beliefs and normalizing said beliefs
+            self.beliefs = newBelief
+            self.beliefs.normalize()
+            #redistributing same number of original particles via sampling updated beliefs
+            for particleNum in range(len(self.particles)):
+                self.particles[particleNum] = self.beliefs.sample()
+        #if the total weight of all particles is 0, initialize particles
+        else:
+            self.initializeUniformly(gameState)
 
     def elapseTime(self, gameState):
         """
