@@ -503,7 +503,7 @@ class JointParticleFilter(ParticleFilter):
         self.legalPositions #places a ghost may occupy
         AllPosParticles = list(itertools.product(self.legalPositions, repeat=self.numGhosts)) #creates cartesian product
         for i in range(self.numParticles):
-            self.particles.append(AllPosParticles[random.randint(0,len(AllPosParticles)-1)])
+            self.particles.append(AllPosParticles[random.randint(0,len(AllPosParticles)-1)]) #adding random permutations to particles may be wrong
         #print(self.particles)  
         #create the distrubution
         beliefs = DiscreteDistribution()
@@ -583,11 +583,16 @@ class JointParticleFilter(ParticleFilter):
 
             # now loop through and update each entry in newParticle...
             "*** YOUR CODE HERE ***"
-            raiseNotDefined()
+            index = 0
+            # now loop through and update each entry in self.particles
+            for i in range(self.numGhosts):
+                newPosDist = self.getPositionDistribution(gameState, newParticle, i, self.ghostAgents[i])
+                self.particles[index] = newPosDist.sample()
 
             """*** END YOUR CODE HERE ***"""
             newParticles.append(tuple(newParticle))
         self.particles = newParticles
+        
 
 
 # One JointInference module is shared globally across instances of MarginalInference
