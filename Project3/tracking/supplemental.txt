@@ -1,0 +1,14 @@
+Project 3
+Group members: Gabriel Shultz and Tristan Jibbens
+
+There is a small problem with our q4 and the exact inference is slightly off. 
+Looking at the small squared norm will confirm this.
+
+3-1
+The manhattan distance will 
+
+10-1
+Updating with the elapsed time allows knowledge of where the ghosts could possibly be 
+move after move and this gives direction information to pacman. Whereas the manhattan distance alone
+cannot always reduce to a singular direction. Therefore pacman is more often not heading for a hotspot
+with no ghost.
