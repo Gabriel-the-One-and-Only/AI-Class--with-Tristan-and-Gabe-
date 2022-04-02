@@ -457,10 +457,14 @@ class ParticleFilter(InferenceModule):
         gameState.
         """
         "*** YOUR CODE HERE ***"
+        #seting index variable for the particles
         index = 0
+        #for each particle, grab position distribution and then set
+        # the particle to a sample from the distribution
         for particle in self.particles:
             newPosDist = self.getPositionDistribution(gameState, particle)
             self.particles[index] = newPosDist.sample()
+            index+=1
 
     def getBeliefDistribution(self):
         """
