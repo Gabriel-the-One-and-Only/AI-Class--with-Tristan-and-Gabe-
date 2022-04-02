@@ -127,7 +127,7 @@ class DiscreteDistribution(dict):
         for value in itemList:
             index += 1
             sumDis+= value[1]
-            if sumDis > rand:
+            if sumDis >= rand:
                 break   
         #return item key
         return itemList[index][0]
@@ -354,6 +354,7 @@ class ExactInference(InferenceModule):
                 newBelief[position] += self.beliefs[oldPos] * newPosDist[position]
         #setting beliefs to the new beliefs
         self.beliefs = newBelief
+        self.beliefs.normalize()
 
     def getBeliefDistribution(self):
         return self.beliefs
