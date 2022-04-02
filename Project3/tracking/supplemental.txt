@@ -1,11 +1,14 @@
 Project 3
-Group members: Gabriel Shultz and Tristan Jibbens
+Group members: Gabriel Shultz and Tristan Jibben
 
 There is a small problem with our q4 and the exact inference is slightly off. 
 Looking at the small squared norm will confirm this.
 
 3-1
-The manhattan distance will 
+Parts 2 and 3 of the Q3 test we had noticed a difference emerging in the coloration of the squares
+with the bottom squares having a higher chance. This is most likely due to the Ghost using the 
+GoSouthWest move distribution, and because of pacman knowing this the shading of the squares
+favored the south portion of the boards just like the ghost did.
 
 10-1
 Updating with the elapsed time allows knowledge of where the ghosts could possibly be 
