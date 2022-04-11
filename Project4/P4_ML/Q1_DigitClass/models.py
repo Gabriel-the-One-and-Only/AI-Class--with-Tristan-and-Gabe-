@@ -20,15 +20,18 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
+        #size of the hidden layers
         layerSize = 100
+        #size of each batch
         self.batchSize = 50
-
+        #'w' stands for weight while 'b' stands for the bias
+        #hidden layer 1
         self.w1 = nn.Parameter(784,layerSize)
         self.b1 = nn.Parameter(1,layerSize)
-
+        #hidden layer 2
         self.w2 = nn.Parameter(layerSize,layerSize)
         self.b2 = nn.Parameter(1,layerSize)
-
+        #output layer
         self.wOut = nn.Parameter(layerSize, 10)
         self.bOut = nn.Parameter(1,10)
         
@@ -50,10 +53,11 @@ class DigitClassificationModel(object):
                 (also called logits)
         """
         "*** YOUR CODE HERE ***"
+        #crunching the first layer
         layer1 = nn.ReLU(nn.AddBias(nn.Linear(x,self.w1),self.b1))
-
+        #crunching the second layer with the first layer logits as an input
         layer2 = nn.ReLU(nn.AddBias(nn.Linear(layer1,self.w2),self.b2))
-
+        #crunshing and returning the output logits using the second layer logits as an input
         return nn.AddBias(nn.Linear(layer2,self.wOut),self.bOut)
 
     def get_loss(self, x, y):
@@ -70,28 +74,35 @@ class DigitClassificationModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
+        #returns the loss by running the nural net and comparing the calculated labels to the correct ones
         return nn.SoftmaxLoss(self.run(x),y)
     def train(self, dataset):
         """
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
-        learnRate = 0.025
-        
+        #starting learn rate, changes later on
+        learnRate = 0.05
+        #index variable for later use
         index = 0
+        #for the given image data and correct label to that data in new batch set
         for x,y in dataset.iterate_forever(self.batchSize):
-            slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])
+            #gradient slope as a vector
+            slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])\
+            #update weights and biases of layer 1
             self.w1.update(slope[0],-learnRate)
             self.b1.update(slope[1],-learnRate)
-
+            #update weights and biases of layer 2
             self.w2.update(slope[2],-learnRate)
             self.b2.update(slope[3],-learnRate)
-
+            #update weights and biases of output layer
             self.wOut.update(slope[4],-learnRate)
             self.bOut.update(slope[5],-learnRate)
-            if index > 15000:
+            #if ~6-7 epochs have been computed, lower the learning rate to 0.005 and check for accuracy  
+            if index > 7500:
                 learnRate = 0.005
-                if dataset.get_validation_accuracy() > 0.971:
+                #only checked later due to how computationaly intensive this is
+                if dataset.get_validation_accuracy() > 0.972:
                     return
             else:
                 index += 1
