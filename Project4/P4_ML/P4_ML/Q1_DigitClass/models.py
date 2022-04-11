@@ -20,7 +20,18 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
-        W1 = 
+        layerSize = 100
+        self.batchSize = 20
+
+        self.w1 = nn.Parameter(784,layerSize)
+        self.b1 = nn.Parameter(1,layerSize)
+
+        self.w2 = nn.Parameter(layerSize,layerSize)
+        self.b2 = nn.Parameter(1,layerSize)
+
+        self.wOut = nn.Parameter(layerSize, 10)
+        self.bOut = nn.Parameter(1,10)
+        
 
     def run(self, x):
         """
@@ -39,7 +50,11 @@ class DigitClassificationModel(object):
                 (also called logits)
         """
         "*** YOUR CODE HERE ***"
-        
+        layer1 = nn.ReLU(nn.AddBias(nn.Linear(x,self.w1),self.b1))
+
+        layer2 = nn.ReLU(nn.AddBias(nn.Linear(layer1,self.w2),self.b2))
+
+        return nn.AddBias(nn.Linear(layer2,self.wOut),self.bOut)
 
     def get_loss(self, x, y):
         """
@@ -55,7 +70,7 @@ class DigitClassificationModel(object):
         Returns: a loss node
         """
         "*** YOUR CODE HERE ***"
-
+        return nn.SoftmaxLoss(self.run(x),y)
     def train(self, dataset):
         """
         Trains the model.
