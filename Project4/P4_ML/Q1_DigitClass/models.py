@@ -76,7 +76,7 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
-        learnRate = 0.010
+        learnRate = 0.025
         
         index = 0
         for x,y in dataset.iterate_forever(self.batchSize):
@@ -89,8 +89,10 @@ class DigitClassificationModel(object):
 
             self.wOut.update(slope[4],-learnRate)
             self.bOut.update(slope[5],-learnRate)
-            if index > 20000 and dataset.get_validation_accuracy() > 0.975:
-                return
+            if index > 15000:
+                learnRate = 0.005
+                if dataset.get_validation_accuracy() > 0.971:
+                    return
             else:
                 index += 1
         
