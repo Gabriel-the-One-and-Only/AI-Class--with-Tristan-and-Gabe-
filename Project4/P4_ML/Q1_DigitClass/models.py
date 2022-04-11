@@ -21,7 +21,7 @@ class DigitClassificationModel(object):
         # Initialize your model parameters here
         "*** YOUR CODE HERE ***"
         layerSize = 100
-        self.batchSize = 20
+        self.batchSize = 50
 
         self.w1 = nn.Parameter(784,layerSize)
         self.b1 = nn.Parameter(1,layerSize)
@@ -76,20 +76,23 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
-        learnRate = 0.005
-        while dataset.get_validation_accuracy() < 0.978:
-            for x,y in dataset.iterate_forever(self.batchSize):
-                slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])
-                self.w1.update(slope[0],learnRate)
-                self.b1.update(slope[1],learnRate)
+        learnRate = 0.010
+        
+        index = 0
+        for x,y in dataset.iterate_forever(self.batchSize):
+            slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])
+            self.w1.update(slope[0],-learnRate)
+            self.b1.update(slope[1],-learnRate)
 
-                self.w2.update(slope[2],learnRate)
-                self.b2.update(slope[3],learnRate)
+            self.w2.update(slope[2],-learnRate)
+            self.b2.update(slope[3],-learnRate)
 
-                self.wOut.update(slope[4],learnRate)
-                self.bOut.update(slope[5],learnRate)
-
-        return
+            self.wOut.update(slope[4],-learnRate)
+            self.bOut.update(slope[5],-learnRate)
+            if index > 20000 and dataset.get_validation_accuracy() > 0.975:
+                return
+            else:
+                index += 1
         
         #create batches from the dataset
         
