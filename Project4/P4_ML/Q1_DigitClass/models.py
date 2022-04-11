@@ -107,18 +107,6 @@ class DigitClassificationModel(object):
             else:
                 index += 1
         
-        #create batches from the dataset
-        
-        #need to run the algorith for each element in the batch
-        '''
-        oldParameters = [self.w1, self.b1, self.w2, self.b2]
-        newParameters = nn.Linear(nn.Linear(nn.gradients(self.get_loss, oldParameters ), oldParameters), 0.01) #arbitrary step size (learning rate?)
-        #for i in range(len(newParameters)):
-        self.w1 = newParameters[0]
-        self.b1 = newParameters[1]
-        self.w2 = newParameters[2]
-        self.b2 = newParameters[3]
-        '''
             
 
 
