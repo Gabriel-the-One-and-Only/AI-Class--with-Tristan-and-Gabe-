@@ -1,5 +1,6 @@
 ### code base: ai.berkeley.edu
 
+from cmath import sqrt
 import nn
 
 
@@ -81,14 +82,16 @@ class DigitClassificationModel(object):
         Trains the model.
         """
         "*** YOUR CODE HERE ***"
-        #starting learn rate, changes later on
-        learnRate = 0.05
+        
         #index variable for later use
         index = 0
         #for the given image data and correct label to that data in new batch set
         for x,y in dataset.iterate_forever(self.batchSize):
+            index += 1
+            #have the learning rate decrease every batch by dividing by the quadroot of total batches
+            learnRate = 0.5/(index**(0.25))
             #gradient slope as a vector
-            slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])\
+            slope = nn.gradients(self.get_loss(x,y),[self.w1,self.b1,self.w2,self.b2,self.wOut,self.bOut])
             #update weights and biases of layer 1
             self.w1.update(slope[0],-learnRate)
             self.b1.update(slope[1],-learnRate)
@@ -98,14 +101,9 @@ class DigitClassificationModel(object):
             #update weights and biases of output layer
             self.wOut.update(slope[4],-learnRate)
             self.bOut.update(slope[5],-learnRate)
-            #if ~6-7 epochs have been computed, lower the learning rate to 0.005 and check for accuracy  
-            if index > 7500:
-                learnRate = 0.005
-                #only checked later due to how computationaly intensive this is
-                if dataset.get_validation_accuracy() > 0.972:
-                    return
-            else:
-                index += 1
+            #if ~6-7 epochs have been computed, now start checking for accuracy threshold 
+            if index > 7500 and dataset.get_validation_accuracy() > 0.975:
+                return
         
             
 
