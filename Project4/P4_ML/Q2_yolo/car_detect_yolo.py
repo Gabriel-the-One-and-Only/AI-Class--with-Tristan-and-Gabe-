@@ -42,24 +42,24 @@ def yolo_filter_boxes(boxes, box_confidence, box_class_probs, threshold = .6):
     ### START CODE HERE
     # Step 1: Compute box scores
     ##(≈ 1 line)
-    box_scores = None
+    box_scores = box_confidence * box_class_probs
 
     # Step 2: Find the box_classes using the max box_scores, keep track of the corresponding score
     ##(≈ 2 lines)
     # IMPORTANT: set axis to -1
-    box_classes = None
-    box_class_scores = None
+    box_classes = np.argmax(box_scores,-1)
+    box_class_scores = tf.reduce_max(box_scores,-1)
     
     # Step 3: Create a filtering mask based on "box_class_scores" by using "threshold". The mask should have the
     # same dimension as box_class_scores, and be True for the boxes you want to keep (with probability >= threshold)
     ## (≈ 1 line)
-    filtering_mask = None
+    filtering_mask = box_class_scores > threshold
     
     # Step 4: Apply the mask to box_class_scores, boxes and box_classes
     ## (≈ 3 lines)
-    scores = None
-    boxes = None
-    classes = None
+    scores = tf.boolean_mask(box_scores,filtering_mask)
+    boxes = tf.boolean_mask(box_classes,filtering_mask)
+    classes = tf.boolean_mask(box_class_scores,filtering_mask)
     ### END CODE HERE
     
     return scores, boxes, classes
