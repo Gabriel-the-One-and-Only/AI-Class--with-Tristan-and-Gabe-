@@ -2,6 +2,7 @@
 
 import argparse
 import os
+
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
 import scipy.io
@@ -133,13 +134,13 @@ def yolo_non_max_suppression(scores, boxes, classes, max_boxes = 10, iou_thresho
     ### START CODE HERE
     # Use tf.image.non_max_suppression() to get the list of indices corresponding to boxes you keep
     ##(≈ 1 line)
-    nms_indices = None
+    nms_indices = tf.image.non_max_suppression(boxes,scores,max_boxes_tensor,iou_threshold)
     
     # Use tf.gather() to select only nms_indices from scores, boxes and classes
     ##(≈ 3 lines)
-    scores = None
-    boxes = None
-    classes = None
+    scores = tf.gather(scores,nms_indices)
+    boxes = tf.gather(boxes,nms_indices)
+    classes = tf.gather(classes,nms_indices)
     ### END CODE HERE
 
     
@@ -183,20 +184,20 @@ def yolo_eval(yolo_outputs, image_shape = (720, 1280), max_boxes=10, score_thres
     
     ### START CODE HERE
     # Retrieve outputs of the YOLO model (≈1 line)
-    box_xy, box_wh, box_confidence, box_class_probs = None
+    box_xy, box_wh, box_confidence, box_class_probs = yolo_outputs
     
     # Convert boxes to be ready for filtering functions (convert boxes box_xy and box_wh to corner coordinates)
-    boxes = None
+    boxes = yolo_boxes_to_corners(box_xy, box_wh)
     
     # Use one of the functions you've implemented to perform Score-filtering with a threshold of score_threshold (≈1 line)
-    scores, boxes, classes = None
+    scores, boxes, classes = yolo_filter_boxes(boxes,box_confidence,box_class_probs,score_threshold)
     
     # Scale boxes back to original image shape.
-    boxes = None
+    boxes = scale_boxes(boxes, image_shape)
     
     # Use one of the functions you've implemented to perform Non-max suppression with 
     # maximum number of boxes set to max_boxes and a threshold of iou_threshold (≈1 line)
-    scores, boxes, classes = None
+    scores, boxes, classes = yolo_non_max_suppression(scores,boxes,classes,max_boxes,iou_threshold)
     ### END CODE HERE
     
     return scores, boxes, classes
