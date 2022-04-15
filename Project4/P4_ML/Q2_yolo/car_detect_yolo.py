@@ -161,7 +161,7 @@ def yolo_boxes_to_corners(box_xy, box_wh):
 # UNQ_C4 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)
 # GRADED FUNCTION: yolo_eval
 
-def yolo_eval(yolo_outputs, image_shape = (720, 1280), max_boxes=10, score_threshold=.6, iou_threshold=.5):
+def yolo_eval(yolo_outputs, image_shape = (720., 1280.), max_boxes=10, score_threshold=.6, iou_threshold=.5):
     """
     Converts the output of YOLO encoding (a lot of boxes) to your predicted boxes along with their scores, box coordinates and classes.
     
@@ -223,6 +223,7 @@ def predict(image_file):
     image, image_data = preprocess_image("images/" + image_file, model_image_size = (608, 608))
     
     yolo_model_outputs = yolo_model(image_data)
+   
     yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
     
     out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [image.size[1],  image.size[0]], 10, 0.3, 0.5)
