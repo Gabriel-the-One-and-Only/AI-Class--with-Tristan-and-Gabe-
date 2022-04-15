@@ -14,7 +14,7 @@ from PIL import ImageFont, ImageDraw, Image
 import tensorflow as tf
 from tensorflow.python.framework.ops import EagerTensor
 from yolo_utils import  read_classes, read_anchors,scale_boxes, preprocess_image
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import yolo_model
 from yad2k.models.keras_yolo import yolo_head
 from yad2k.utils.draw_boxes import get_colors_for_classes
 
@@ -161,7 +161,7 @@ def yolo_boxes_to_corners(box_xy, box_wh):
 # UNQ_C4 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)
 # GRADED FUNCTION: yolo_eval
 
-def yolo_eval(yolo_outputs, image_shape = (720, 1280), max_boxes=10, score_threshold=.6, iou_threshold=.5):
+def yolo_eval(yolo_outputs, image_shape = (720., 1280.), max_boxes=10, score_threshold=.6, iou_threshold=.5):
     """
     Converts the output of YOLO encoding (a lot of boxes) to your predicted boxes along with their scores, box coordinates and classes.
     
@@ -221,8 +221,9 @@ def predict(image_file):
 
     # Preprocess your image
     image, image_data = preprocess_image("images/" + image_file, model_image_size = (608, 608))
-    
-    yolo_model_outputs = yolo_model(image_data)
+    print("Preprocessed the image")
+    yolo_model_outputs = tf.keras.model.yolo_model(image_data)
+    print("Got passed the yolo_model line")
     yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
     
     out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [image.size[1],  image.size[0]], 10, 0.3, 0.5)
