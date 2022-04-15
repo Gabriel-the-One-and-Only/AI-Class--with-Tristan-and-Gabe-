@@ -57,9 +57,9 @@ def yolo_filter_boxes(boxes, box_confidence, box_class_probs, threshold = .6):
     
     # Step 4: Apply the mask to box_class_scores, boxes and box_classes
     ## (≈ 3 lines)
-    scores = tf.boolean_mask(box_scores,filtering_mask)
-    boxes = tf.boolean_mask(box_classes,filtering_mask)
-    classes = tf.boolean_mask(box_class_scores,filtering_mask)
+    scores = tf.boolean_mask(box_class_scores,filtering_mask)
+    boxes = tf.boolean_mask(boxes,filtering_mask)
+    classes = tf.boolean_mask(box_classes,filtering_mask)
     ### END CODE HERE
     
     return scores, boxes, classes
