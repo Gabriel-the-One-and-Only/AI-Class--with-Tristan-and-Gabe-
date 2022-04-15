@@ -82,22 +82,25 @@ def iou(box1, box2):
     ### START CODE HERE
     # Calculate the (yi1, xi1, yi2, xi2) coordinates of the intersection of box1 and box2. Calculate its Area.
     ##(≈ 7 lines)
-    xi1 = None
-    yi1 = None
-    xi2 = None
-    yi2 = None
-    inter_width = None
-    inter_height =  None
-    inter_area = None
+    xi1 = max(box1_x1, box2_x1)
+    yi1 = max(box1_y1, box2_y1)
+    xi2 = min(box1_x2, box2_x2)
+    yi2 = min(box1_y2, box2_y2)
+    inter_width = xi2-xi1
+    inter_height =  yi2-yi1
+    if (inter_width <= 0 or inter_height <=0):
+        inter_area = 0
+    else:
+        inter_area = inter_width*inter_height
     
     # Calculate the Union area by using Formula: Union(A,B) = A + B - Inter(A,B)
     ## (≈ 3 lines)
-    box1_area = None
-    box2_area = None
-    union_area = None
+    box1_area = (box1_x2-box1_x1)*(box1_y2 - box1_y1)
+    box2_area = (box2_x2-box2_x1)*(box2_y2 - box2_y1)
+    union_area = box1_area + box2_area - inter_area
     
     # compute the IoU
-    iou = None
+    iou = inter_area/union_area
     ### END CODE HERE
     
     return iou
