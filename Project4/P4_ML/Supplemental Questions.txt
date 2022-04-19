@@ -1,0 +1,23 @@
+Gabriel Shultz, Tristan Jibben
+
+Section 1 Question:
+	The number of hidden layers was chosen to be two because we thought of how we would identify
+handwritten numbers ourselves and decided on needing at least 2. number of nodes and batch size were
+found through fiddling around with the values to find the fastest computing combination. for the 
+learning rate we decided on a variable rate that would be large initially but get smaller as batches
+progressed in order to have the benefits of both a fast and slow learning rate.
+
+Section 2 Questions:
+	The intersection over union (IoU) opperation is designed to output a score from 0 to 1 on how
+close two bounding boxes are to being the same. The way IoU does this is by taking the area of the 
+boxes' intersection and dividing it by the area of the boxes union. This is used in non-max supression 
+to find the bounding box that has the best chance of accurately representing the object its surrounding.
+
+	The purpose of non-max suppression is to reduce the number of boxes around the same object. For 
+example, 3 seperate bounding boxes could all be on the same object, so non-max supression uses the 
+intersection over union opperation to get scores on how close each box is to being the other boxes.
+Non-max suppression would then keep the box that was most like the other two and delete the others. 
+	
+
+
+		 
