@@ -17,7 +17,8 @@ to find the bounding box that has the best chance of accurately representing the
 example, 3 seperate bounding boxes could all be on the same object, so non-max supression uses the 
 intersection over union opperation to get scores on how close each box is to being the other boxes.
 Non-max suppression would then keep the box that was most like the other two and delete the others. 
-	
 
-
-		 
+Section 2 - Q5:
+	The image contains boxes of multiple colors around objects in the image that the neural network 
+was trained to learn. The boxes contain the name of the object it thinks it is, along with a score 
+regaurding how confident the network is in its prediction.
