@@ -12,7 +12,8 @@ import PIL
 from PIL import ImageFont, ImageDraw, Image
 import tensorflow as tf
 from tensorflow.python.framework.ops import EagerTensor
-from yolo_utils import  read_classes, read_anchors,scale_boxes, preprocess_image
+import yolo_utils
+from yolo_utils import  read_classes, read_anchors,scale_boxes, preprocess_image, draw_boxes
 from tensorflow.keras.models import load_model
 from yad2k.models.keras_yolo import yolo_head
 from yad2k.utils.draw_boxes import get_colors_for_classes
@@ -216,34 +217,42 @@ def predict(image_file):
     
     Note: "None" actually represents the number of predicted boxes, it varies between 0 and max_boxes. 
     """
+    
+    class_names = read_classes("model_data/coco_classes.txt")
+    anchors = read_anchors("model_data/yolo_anchors.txt")
+    yolo_model = load_model("model_data/", compile=False)
 
 
     # Preprocess your image
     image, image_data = preprocess_image("images/" + image_file, model_image_size = (608, 608))
-    yolo_model = load_model("model_data/", compile=False)
+    #yolo_model = load_model("model_data/", compile=False)
     print("Preprocessed the image")
     yolo_model_outputs = yolo_model(image_data)
     print("Got passed the yolo_model line")
     class_names = read_classes("model_data\coco_classes.txt")
     print("Got passed reading class_names")
-    yolo_outputs = yolo_head(yolo_model_outputs, read_anchors("model_data\yolo_anchors.txt"), len(class_names))
+    yolo_outputs = yolo_head(yolo_model_outputs, anchors, len(class_names))
     print("Got passed yolo head")
     
     out_scores, out_boxes, out_classes = yolo_eval(yolo_outputs, [float(image.size[1]),  float(image.size[0])], 10, 0.3, 0.5)
 
     # Print predictions info
     print('Found {} boxes for {}'.format(len(out_boxes), "images/" + image_file))
-    
-    '''
     # Generate colors for drawing bounding boxes.
     colors = get_colors_for_classes(len(class_names))
+    print("After colors")
     # Draw bounding boxes on the image file
     #draw_boxes2(image, out_scores, out_boxes, out_classes, class_names, colors, image_shape)
-    draw_boxes(image, out_boxes, out_classes, class_names, out_scores)
+    yolo_utils.draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors) 
+    print("After draw boxes")
     # Save the predicted bounding box on the image
     image.save(os.path.join("out", image_file), quality=100)
+    print("After saving the image")
     # Display the results in the notebook
     output_image = Image.open(os.path.join("out", image_file))
+    
     imshow(output_image)
-    '''
+    
+    print("After displaying the image")
+    
     return out_scores, out_boxes, out_classes
