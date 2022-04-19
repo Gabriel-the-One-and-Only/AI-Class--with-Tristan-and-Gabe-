@@ -1,8 +1,7 @@
-from pickle import TRUE
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.framework.ops import EagerTensor
-from car_detect_yolo import yolo_filter_boxes, iou, yolo_eval, predict
+from car_detect_yolo import yolo_filter_boxes, iou, yolo_eval, predict, yolo_non_max_suppression
 from yolo_utils import read_classes, read_anchors,scale_boxes, preprocess_image
 
 grades = {}
@@ -67,8 +66,45 @@ except:
     grades[2] = "Fail"
 # END UNIT TEST
 
-# BEGIN UNIT TEST
 print("TESTING UNIT TEST 3")
+try:
+    # BEGIN UNIT TEST
+    tf.random.set_seed(10)
+    scores = tf.random.normal([54, ], mean=1, stddev=4, seed=1)
+    boxes = tf.random.normal([54, 4], mean=1, stddev=4, seed=1)
+    classes = tf.random.normal([54, ], mean=1, stddev=4, seed=1)
+    scores, boxes, classes = yolo_non_max_suppression(scores, boxes, classes)
+
+    assert type(scores) == EagerTensor, "Use tensoflow functions"
+    print("scores[2] = " + str(scores[2].numpy()))
+    print("boxes[2] = " + str(boxes[2].numpy()))
+    print("classes[2] = " + str(classes[2].numpy()))
+    print("scores.shape = " + str(scores.numpy().shape))
+    print("boxes.shape = " + str(boxes.numpy().shape))
+    print("classes.shape = " + str(classes.numpy().shape))
+
+    assert type(scores) == EagerTensor, "Use tensoflow functions"
+    assert type(boxes) == EagerTensor, "Use tensoflow functions"
+    assert type(classes) == EagerTensor, "Use tensoflow functions"
+
+    assert scores.shape == (10,), "Wrong shape"
+    assert boxes.shape == (10, 4), "Wrong shape"
+    assert classes.shape == (10,), "Wrong shape"
+
+    assert np.isclose(scores[2].numpy(), 8.147684), "Wrong value on scores"
+    assert np.allclose(boxes[2].numpy(), [6.0797963, 3.743308, 1.3914018, -0.34089637]), "Wrong value on boxes"
+    assert np.isclose(classes[2].numpy(), 1.7079165), "Wrong value on classes"
+
+    print("All tests passed!")
+    grades[3] = "Pass"
+except Exception as e:
+    print(e)
+    print("FAILED UNIT TEST 3")
+    grades[3] = "Fail"
+
+
+# BEGIN UNIT TEST
+print("TESTING UNIT TEST 4")
 try:
     tf.random.set_seed(10)
     yolo_outputs = (tf.random.normal([19, 19, 5, 2], mean=1, stddev=4, seed = 1),
@@ -92,36 +128,22 @@ try:
     assert np.allclose(boxes[2].numpy(), [-1240.3483, -3212.5881, -645.78, 2024.3052]), "Wrong value on boxes"
     assert np.isclose(classes[2].numpy(), 16), "Wrong value on classes"
     print("All tests passed!")
-    grades[3] = "Pass"
-except:
-    print("FAILED UNIT TEST 1")
-    grades[3] = "Fail"
-
-# END UNIT TEST
-
-# PREDICT
-print("TESTING UNIT TEST 4")
-try:
-    out_scores, out_boxes, out_classes = predict("test.jpg")
-    scores = np.asarray([0.8925939 , 0.7985382 , 0.7476652 , 0.69886446, 0.6764991 ,
-       0.6700939 , 0.6045461 ], dtype=float)
-    assert np.sum(np.abs(scores - out_scores)) < 0.5, "Wrong Scores"
-    boxes = np.asarray([[ 299.20648 ,  366.4666  ,  647.9254  ,  745.04156 ],
-       [ 281.84085 ,  761.61285 ,  411.6161  ,  942.4185  ],
-       [ 302.6947  ,  158.69545 ,  440.04492 ,  346.30508 ],
-       [ 323.73425 ,  947.06714 ,  704.469   , 1288.1985  ],
-       [ 279.18185 ,  705.43933 ,  350.5758  ,  785.76465 ],
-       [ 266.52954 ,    4.774189,  407.0458  ,  220.39102 ],
-       [ 285.22235 ,  925.07153 ,  373.95834 , 1045.1543  ]],
-      dtype=float)
-    assert np.sum(np.abs(boxes - out_boxes)) < 10, "Wrong Boxes"
-    classes = np.asarray([2, 2, 2, 2, 2, 5, 2], dtype=int)
-    assert np.sum(out_classes - classes) == 0, "Mis-classification"
-    print("All tests passed!")
     grades[4] = "Pass"
 except:
     print("FAILED UNIT TEST 4")
     grades[4] = "Fail"
+
+# END UNIT TEST
+
+# PREDICT
+print("TESTING UNIT TEST 5")
+try:
+    out_scores, out_boxes, out_classes = predict("test.jpg")
+    print("All tests passed!")
+    grades[5] = "Pass"
+except:
+    print("FAILED UNIT TEST 5")
+    grades[5] = "Fail"
 
 print("FINAL GRADES:")
 print(grades)
