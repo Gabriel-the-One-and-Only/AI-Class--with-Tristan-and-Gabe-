@@ -63,7 +63,13 @@ class QLearningAgent(ReinforcementAgent):
           terminal state, you should return a value of 0.0.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #initalize q value
+        qValue = 0
+        # for each group of transistions, states, and probablilities
+        #do the value iteration state update equation minus the max part
+        for action in self.getLegalActions(state):
+            qValue += self.mdp.getReward(state,action,transStateProb[0]) + self.discount*(self.values[transStateProb[0]]*transStateProb[1])
+        return qValue
 
     def computeActionFromQValues(self, state):
         """
@@ -72,7 +78,13 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #create temporary variable
+        potentialPolicies = util.Counter()
+        #grab the values of all possible actions and get the best choice/policy
+        for action in self.mdp.getPossibleActions(state):
+            potentialPolicies[action] = self.computeQValueFromValues(state,action)
+        return potentialPolicies.argMax()
+        
 
     def getAction(self, state):
         """
