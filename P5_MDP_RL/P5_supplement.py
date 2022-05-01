@@ -34,6 +34,8 @@ def question2():
     return answerDiscount, answerNoise
 
 def question3a():
+    #setting the discount really low makes the earlier option worth more in the end
+    #having no noise ensures that it will take the risk
     answerDiscount = 0.2
     answerNoise = 0.0
     answerLivingReward = 0.0
@@ -41,6 +43,8 @@ def question3a():
     # If not possible, return 'NOT POSSIBLE'
 
 def question3b():
+    #still discounted to prefer closer to farther away, add a little bit of noise to 
+    #deter from riskier path, and make living a tiny bit painful
     answerDiscount = 0.2
     answerNoise = 0.01
     answerLivingReward = -0.001
@@ -48,6 +52,7 @@ def question3b():
     # If not possible, return 'NOT POSSIBLE'
 
 def question3c():
+    # not as much discount will make the high reward path much more worth it
     answerDiscount = 0.6
     answerNoise = 0.01
     answerLivingReward = -0.2
@@ -55,6 +60,7 @@ def question3c():
     # If not possible, return 'NOT POSSIBLE'
 
 def question3d():
+    #have more noise, and a high discount value to chose better reward on the safer path
     answerDiscount = 0.9
     answerNoise = 0.1
     answerLivingReward = 0.0
@@ -62,6 +68,7 @@ def question3d():
     # If not possible, return 'NOT POSSIBLE'
 
 def question3e():
+    #Make living better than the possible rewards
     answerDiscount = 0.2
     answerNoise = 0.0
     answerLivingReward = 20
@@ -69,6 +76,8 @@ def question3e():
     # If not possible, return 'NOT POSSIBLE'
 
 def question8():
+    #while a decent percentage is possible, 99% is
+    #just too high for only 50 itterations
     answerEpsilon = None
     answerLearningRate = None
     return 'NOT POSSIBLE'
