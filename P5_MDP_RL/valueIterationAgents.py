@@ -63,6 +63,22 @@ class ValueIterationAgent(ValueEstimationAgent):
     def runValueIteration(self):
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
+        #itterate the number of times requested
+        for iteration in range(self.iterations):
+            #creating temporary variable storage
+            tempValues = util.Counter()
+            #getting each state in gridworld
+            for state in self.mdp.getStates():
+                #if it is a terminal state, exit and get value
+                if self.mdp.isTerminal(state):
+                    self.values[state] = self.mdp.getReward(state,'exit','')
+                #else, use value itteration state update equation
+                else:
+                    tempValues[state] = max([self.computeQValueFromValues(state, action)\
+                    for action in self.mdp.getPossibleActions(state)])
+            #update values for current itteration
+            self.values = tempValues
+                    
 
 
     def getValue(self, state):
@@ -78,7 +94,14 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #initalize q value
+        qValue = 0
+        # for each group of transistions, states, and probablilities
+        #do the value iteration state update equation minus the max part
+        for transStateProb in self.mdp.getTransitionStatesAndProbs(state, action):
+            qValue += self.mdp.getReward(state,action,transStateProb[0]) + self.discount*(self.values[transStateProb[0]]*transStateProb[1])
+        return qValue
+        
 
     def computeActionFromValues(self, state):
         """
@@ -90,7 +113,13 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #create temporary variable
+        potentialPolicies = util.Counter()
+        #grab the values of all possible actions and get the best choice/policy
+        for action in self.mdp.getPossibleActions(state):
+            potentialPolicies[action] = self.computeQValueFromValues(state,action)
+        return potentialPolicies.argMax()
+
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
