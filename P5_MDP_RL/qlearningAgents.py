@@ -52,7 +52,10 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        qValue =self.values[(state,action)]
+        if qValue == None:
+          return 0.0
+        return qValue
 
 
     def computeValueFromQValues(self, state):
@@ -101,9 +104,13 @@ class QLearningAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         action = None
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        if util.flipCoin(self.epsilon) == False:
+          action = self.computeActionFromQValues(state)
+        else:
+          action = random.choice(legalActions)
         return action
+
+        
 
     def update(self, state, action, nextState, reward):
         """
