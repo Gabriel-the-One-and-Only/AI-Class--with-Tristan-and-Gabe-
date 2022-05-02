@@ -30,7 +30,10 @@
 
 def question2():
     answerDiscount = 0.9
-    answerNoise = 0
+    answerNoise = 0 #if there is no chance it will fall off the bridge, it will try to exit the map as quickly as possible.
+    #otherwise it thinks the best thing to do is not attempt. Changing the discount did not help it try to cross.
+    #Any negative disount made it head to the bad region which makes sense. With positive values, the policy was to move back to origin from the first
+    #two squares to the left of start. The middle would either head to start or the red tile above it. And the two squares closest to the end went to the end.
     return answerDiscount, answerNoise
 
 def question3a():

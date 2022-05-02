@@ -67,12 +67,12 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         #initalize q value
-        qValue = 0
-        # for each group of transistions, states, and probablilities
-        #do the value iteration state update equation minus the max part
+        maxValue = 0.0
+    
         for action in self.getLegalActions(state):
-            qValue += self.mdp.getReward(state,action,transStateProb[0]) + self.discount*(self.values[transStateProb[0]]*transStateProb[1])
-        return qValue
+            if self.values[(state,action)] > maxValue:
+              maxValue = self.values[(state,action)]
+        return maxValue
 
     def computeActionFromQValues(self, state):
         """
@@ -81,12 +81,17 @@ class QLearningAgent(ReinforcementAgent):
           you should return None.
         """
         "*** YOUR CODE HERE ***"
-        #create temporary variable
-        potentialPolicies = util.Counter()
-        #grab the values of all possible actions and get the best choice/policy
-        for action in self.mdp.getPossibleActions(state):
-            potentialPolicies[action] = self.computeQValueFromValues(state,action)
-        return potentialPolicies.argMax()
+        maxValue = 0.0
+        actions = self.getLegalActions(state)
+        bestAction = None
+        if actions == ():
+          return None
+        for action in actions :
+            if self.values[(state,action)] > maxValue:
+              maxValue = self.values[(state,action)]
+              bestAction = action
+              
+        return bestAction
         
 
     def getAction(self, state):
